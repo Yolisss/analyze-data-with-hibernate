@@ -14,7 +14,12 @@
          to the db vendor -->
         <property name="dialect">org.hibernate.dialect.H2Dialect</property>
 
+        <!-- tells hibernate to create the schema upon starting the application-->
+        <!-- reads hibernate config files, looks for map entity classes, examining
+         classes and JPA annotations to create db tables and columns -->
+        <property name="hbm2ddl.auto">create</property>
 
+        <!-- informs hibernate we have a mapped entity class-->
         <mapping class="com.teamtreehouse.data.model.Country"/>
 
     </session-factory>
