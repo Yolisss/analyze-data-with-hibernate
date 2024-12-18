@@ -23,6 +23,15 @@ public class Country {
     //we need to make sure one is present
     public Country(){};
 
+    //builder constructor
+    public Country(CountryBuilder builder){
+        this.code = builder.code;
+        this.name = builder.name;
+        this.internetUsers = builder.internetUsers;
+        this.adultLiteracyRate = builder.adultLiteracyRate;
+    };
+
+
     @Override
     public String toString() {
         return "Country{" +
@@ -63,5 +72,37 @@ public class Country {
 
     public void setAdultLiteracyRate(int adultLiteracyRate) {
         this.adultLiteracyRate = adultLiteracyRate;
+    }
+
+    //CountryBuilder CLASS
+    public static class CountryBuilder{
+        private String code;
+        private String name;
+        private int internetUsers;
+        private int adultLiteracyRate;
+
+        //CountryBuilder CONSTRUCTOR
+        //necessary fields needed when creating a country
+        public CountryBuilder(String code, String name){
+            this.code = code;
+            this.name = name;
+        }
+
+        public CountryBuilder withInternetUsers(int internetUsers){
+            this.internetUsers = internetUsers;
+            System.out.println("Setting internetUsers to: " + internetUsers); // Log when it's set
+            return this;
+        };
+
+        public CountryBuilder withAdultLiteracyRate(int adultLiteracyRate){
+            this.adultLiteracyRate = adultLiteracyRate;
+            System.out.println("Setting adultLiteracyRate to: " + adultLiteracyRate); // Log when it's set
+            return this;
+        };
+
+        //method to create and return the Contact object
+        public Country build(){
+            return new Country(this);
+        }
     }
 }

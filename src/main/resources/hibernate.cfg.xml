@@ -1,11 +1,12 @@
-<hibernate-configuration xmlns="http://www.hibernate.org/xsd/orm/cfg">
+<hibernate-configuration>
     <!-- define settings for Hibernate's session factory -->
     <session-factory>
         <!-- DB connection settings -->
         <!-- property -> configure(setting up) db connection with SQL dialect -->
         <property name="connection.driver_class">org.h2.Driver</property>
         <!-- connecting Hibernate to db file -->
-        <property name="connection.url">jdbc:h2./data/worldbank</property>
+        <!-- file. -> file based db -->
+        <property name="connection.url">jdbc:h2:file./data/worldbank</property>
 
         <!-- DB credentials: username -->
         <property name="connection.username">sa</property>
@@ -14,9 +15,7 @@
          to the db vendor -->
         <property name="dialect">org.hibernate.dialect.H2Dialect</property>
 
-        <!-- tells hibernate to create the schema upon starting the application-->
-        <!-- reads hibernate config files, looks for map entity classes, examining
-         classes and JPA annotations to create db tables and columns -->
+        <!-- tells hibernate to create necessary tables-->
         <property name="hbm2ddl.auto">create</property>
 
         <!-- informs hibernate we have a mapped entity class-->
