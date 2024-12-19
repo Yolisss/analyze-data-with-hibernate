@@ -34,12 +34,12 @@ public class Country {
 
     @Override
     public String toString() {
-        return "Country{" +
+        return String.format("Country{" +
                 "code='" + code + '\'' +
                 ", name='" + name + '\'' +
                 ", internetUser=" + internetUsers +
                 ", adultLiteracyRate=" + adultLiteracyRate +
-                '}';
+                '}');
     }
 
     public String getCode() {
@@ -100,7 +100,7 @@ public class Country {
             return this;
         };
 
-        //method to create and return the Contact object
+        //method to create and return the Country object
         public Country build(){
             return new Country(this);
         }

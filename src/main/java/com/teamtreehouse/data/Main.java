@@ -13,6 +13,9 @@ public class Main {
 
 
     public static void main(String[] args) {
+        //retrieve list of countries
+        List<Country> countries = fetchAllCountries();
+
         //building country obj
         Country country = new CountryBuilder("USA", "United States")
                 .withInternetUsers(89)
@@ -27,8 +30,9 @@ public class Main {
         session.getTransaction().commit(); //making changes permanent in the db
 
         //display list of contacts BEFORE THE UPDATE
-        System.out.printf("%n%n Before update %n%n");
-        fetchAllCountries().forEach(System.out::println);
+//        System.out.printf("%n%n Before update %n%n");
+//        fetchAllCountries().forEach(System.out::println);
+
 
     }
 
@@ -53,6 +57,25 @@ public class Main {
         session.close();
 
         return countries;
+    }
+
+    public static void displayCountryData(List<Country> countries){
+        System.out.printf("-------------------------------------------------------------------------------------------------------------------%n");
+        System.out.printf("                                            Country's Data              %n");
+        System.out.printf("-------------------------------------------------------------------------------------------------------------------%n");
+
+        System.out.printf("| %-10s | %-32s | %-20s | %-20s |%n", "CODE", "NAME", "INTERNET USERS", "ADULT LITERACY RATE");
+        System.out.printf("-------------------------------------------------------------------------------------------------------------------%n");
+
+
+        //obj that holds code, name, internet user, adult
+        for(Country country : countries){
+            //grab the data you need
+            String code = country.getCode();
+            String name = country.getName();
+            int internetUsers = (country.getInternetUsers() == 0) ? "--" : String.format("%.2f", country.getInternetUsers());
+            int adultLiteracyRate = country.getAdultLiteracyRate();
+        }
 
     }
-}
+};
