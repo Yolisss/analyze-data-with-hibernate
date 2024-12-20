@@ -15,17 +15,11 @@ public class Main {
 
     public static void main(String[] args) {
 
-        //building country obj
-        Country country = new CountryBuilder("USA", "United States")
-                .withInternetUsers(new BigDecimal("123.1234567811"))
-                .withAdultLiteracyRate(new BigDecimal("98.5736"))
-                .build();
+        //building country objects
+        addSampleCountries();
 
         List<Country> countries = fetchAllCountries();
         System.out.printf("before: %s%n", countries);
-
-        //persist the new country obj to db
-        saveCountry(country);
 
         //trying to grab the updated list of countries
         countries = fetchAllCountries();
@@ -33,6 +27,23 @@ public class Main {
 
         displayCountryData(countries);
 
+    }
+
+    private static void addSampleCountries(){
+        saveCountry(new CountryBuilder("USA", "United States")
+                .withInternetUsers(new BigDecimal("123.12345678"))
+                .withAdultLiteracyRate(new BigDecimal("98.5736"))
+                .build());
+
+        saveCountry(new CountryBuilder("CAN", "Canada")
+                .withInternetUsers(new BigDecimal("98.23456789"))
+                .withAdultLiteracyRate(new BigDecimal("99.8765"))
+                .build());
+
+        saveCountry(new CountryBuilder("MEX", "Mexico")
+                .withInternetUsers(new BigDecimal("75.34567890"))
+                .withAdultLiteracyRate(new BigDecimal("94.5678"))
+                .build());
     }
 
     public static List<Country> fetchAllCountries() {
@@ -86,5 +97,12 @@ public class Main {
         session.getTransaction().commit();
         session.close();
     }
+
+    //calculate and display
+    //max
+    //min values for EACH indicator (IU and ALR)
+
+
+
 
 };
