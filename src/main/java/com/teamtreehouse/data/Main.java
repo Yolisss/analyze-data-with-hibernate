@@ -13,15 +13,15 @@ public class Main {
 
 
     public static void main(String[] args) {
-        //retrieve list of countries
-        //BEFORE?
-        List<Country> countries = fetchAllCountries();
 
         //building country obj
         Country country = new CountryBuilder("USA", "United States")
                 .withInternetUsers(89)
                 .withAdultLiteracyRate(98)
                 .build();
+
+        List<Country> countries = fetchAllCountries();
+        System.out.printf("before: %s%n", countries);
 
         //persist the new country obj to db
         saveCountry(country);
@@ -30,16 +30,12 @@ public class Main {
         countries = fetchAllCountries();
         System.out.printf("updated countries: %s%n", countries);
 
-        //display list of contacts BEFORE THE UPDATE
-        System.out.printf("%n%n Before update %n%n");
-        fetchAllCountries().forEach(System.out::println);
-
-        System.out.printf("%n%n After update %n%n");
         displayCountryData(countries);
+
     }
 
     public static List<Country> fetchAllCountries() {
-       //sessionFactory, managing Hibernate's creation and handling connectin to db
+        //sessionFactory, managing Hibernate's creation and handling connection to db
         //session -> interact with db
         Session session = Util.getSession();
 
@@ -71,13 +67,12 @@ public class Main {
         System.out.printf("-------------------------------------------------------------------------------------------------------------------%n");
 
 
-        //obj that holds code, name, internet user, adult
         for(Country country : countries){
             //grab the data you need
             String code = country.getCode();
             String name = country.getName();
-            String internetUsers = (country.getInternetUsers() == 0) ? "--" : String.format("%.2f", country.getInternetUsers());
-            String adultLiteracyRate = (country.getAdultLiteracyRate() == 0) ? "--" : String.format("%.2f", country.getAdultLiteracyRate());
+            String internetUsers = (country.getInternetUsers() == 0) ? "--" : String.format("%d", country.getInternetUsers());
+            String adultLiteracyRate = (country.getAdultLiteracyRate() == 0) ? "--" : String.format("%d", country.getAdultLiteracyRate());
             System.out.printf("| %-10s | %-32s | %-20s | %-20s |%n", code, name, internetUsers, adultLiteracyRate);
         }
     }

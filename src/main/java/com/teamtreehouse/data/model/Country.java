@@ -90,13 +90,13 @@ public class Country {
 
         public CountryBuilder withInternetUsers(int internetUsers){
             this.internetUsers = internetUsers;
-            System.out.println("Setting internetUsers to: " + internetUsers); // Log when it's set
+           // System.out.println("Setting internetUsers to: " + internetUsers); // Log when it's set
             return this;
         };
 
         public CountryBuilder withAdultLiteracyRate(int adultLiteracyRate){
             this.adultLiteracyRate = adultLiteracyRate;
-            System.out.println("Setting adultLiteracyRate to: " + adultLiteracyRate); // Log when it's set
+            //System.out.println("Setting adultLiteracyRate to: " + adultLiteracyRate); // Log when it's set
             return this;
         };
 
