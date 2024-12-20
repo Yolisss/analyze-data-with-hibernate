@@ -2,6 +2,8 @@ package com.teamtreehouse.data.model;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity //map through this obj's data to pass to db
 public class Country {
     @Id
@@ -12,11 +14,11 @@ public class Country {
     @Column(length = 32)
     private String name;
 
-    @Column(length = 11, precision = 8)
-    private int internetUsers;
+    @Column(precision = 11, scale = 8)
+    private BigDecimal internetUsers;
 
-    @Column(length = 11, precision = 8)
-    private int adultLiteracyRate;
+    @Column(precision = 11, scale = 8)
+    private BigDecimal adultLiteracyRate;
 
     //Default constructor for JPA
     //JPA will call our default constructor when instantiating Country obj
@@ -58,19 +60,19 @@ public class Country {
         this.name = name;
     }
 
-    public int getInternetUsers() {
+    public BigDecimal getInternetUsers() {
         return internetUsers;
     }
 
-    public void setInternetUsers(int internetUsers) {
+    public void setInternetUsers(BigDecimal internetUsers) {
         this.internetUsers = internetUsers;
     }
 
-    public int getAdultLiteracyRate() {
+    public BigDecimal getAdultLiteracyRate() {
         return adultLiteracyRate;
     }
 
-    public void setAdultLiteracyRate(int adultLiteracyRate) {
+    public void setAdultLiteracyRate(BigDecimal adultLiteracyRate) {
         this.adultLiteracyRate = adultLiteracyRate;
     }
 
@@ -78,8 +80,8 @@ public class Country {
     public static class CountryBuilder{
         private String code;
         private String name;
-        private int internetUsers;
-        private int adultLiteracyRate;
+        private BigDecimal internetUsers;
+        private BigDecimal adultLiteracyRate;
 
         //CountryBuilder CONSTRUCTOR
         //necessary fields needed when creating a country
@@ -88,13 +90,13 @@ public class Country {
             this.name = name;
         }
 
-        public CountryBuilder withInternetUsers(int internetUsers){
+        public CountryBuilder withInternetUsers(BigDecimal internetUsers){
             this.internetUsers = internetUsers;
            // System.out.println("Setting internetUsers to: " + internetUsers); // Log when it's set
             return this;
         };
 
-        public CountryBuilder withAdultLiteracyRate(int adultLiteracyRate){
+        public CountryBuilder withAdultLiteracyRate(BigDecimal adultLiteracyRate){
             this.adultLiteracyRate = adultLiteracyRate;
             //System.out.println("Setting adultLiteracyRate to: " + adultLiteracyRate); // Log when it's set
             return this;

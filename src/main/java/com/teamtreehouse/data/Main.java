@@ -6,6 +6,7 @@ import com.teamtreehouse.data.model.Util;
 import jakarta.persistence.criteria.CriteriaQuery;
 import org.hibernate.Session;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -16,8 +17,8 @@ public class Main {
 
         //building country obj
         Country country = new CountryBuilder("USA", "United States")
-                .withInternetUsers(89)
-                .withAdultLiteracyRate(98)
+                .withInternetUsers(new BigDecimal("123.1234567811"))
+                .withAdultLiteracyRate(new BigDecimal("98.5736"))
                 .build();
 
         List<Country> countries = fetchAllCountries();
@@ -71,8 +72,8 @@ public class Main {
             //grab the data you need
             String code = country.getCode();
             String name = country.getName();
-            String internetUsers = (country.getInternetUsers() == 0) ? "--" : String.format("%d", country.getInternetUsers());
-            String adultLiteracyRate = (country.getAdultLiteracyRate() == 0) ? "--" : String.format("%d", country.getAdultLiteracyRate());
+            String internetUsers = (country.getInternetUsers().compareTo(BigDecimal.ZERO) == 0) ? "--" : String.format("%.8f", country.getInternetUsers());
+            String adultLiteracyRate = (country.getAdultLiteracyRate().compareTo(BigDecimal.ZERO) == 0) ? "--" : String.format("%.8f", country.getAdultLiteracyRate());
             System.out.printf("| %-10s | %-32s | %-20s | %-20s |%n", code, name, internetUsers, adultLiteracyRate);
         }
     }
