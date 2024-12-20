@@ -22,18 +22,18 @@ public class Main {
                 .withAdultLiteracyRate(98)
                 .build();
 
+        //persist the new country obj to db
+        saveCountry(country);
 
-        //persist country obj to db
-        Session session = Util.getSession(); //get the session to interact with db
-        session.beginTransaction();
-        session.save(country);
-        session.getTransaction().commit(); //making changes permanent in the db
+        countries = fetchAllCountries();
+
 
         //display list of contacts BEFORE THE UPDATE
-//        System.out.printf("%n%n Before update %n%n");
-//        fetchAllCountries().forEach(System.out::println);
+        System.out.printf("%n%n Before update %n%n");
+        fetchAllCountries().forEach(System.out::println);
 
-
+        System.out.printf("%n%n After update %n%n");
+        displayCountryData(countries);
     }
 
     public static List<Country> fetchAllCountries() {
@@ -59,6 +59,7 @@ public class Main {
         return countries;
     }
 
+
     public static void displayCountryData(List<Country> countries){
         System.out.printf("-------------------------------------------------------------------------------------------------------------------%n");
         System.out.printf("                                            Country's Data              %n");
@@ -73,9 +74,19 @@ public class Main {
             //grab the data you need
             String code = country.getCode();
             String name = country.getName();
-            int internetUsers = (country.getInternetUsers() == 0) ? "--" : String.format("%.2f", country.getInternetUsers());
-            int adultLiteracyRate = country.getAdultLiteracyRate();
+            String internetUsers = (country.getInternetUsers() == 0) ? "--" : String.format("%.2f", country.getInternetUsers());
+            String adultLiteracyRate = (country.getAdultLiteracyRate() == 0) ? "--" : String.format("%.2f", country.getAdultLiteracyRate());
+            System.out.printf("| %-10s | %-32s | %-20s | %-20s |%n", code, name, internetUsers, adultLiteracyRate);
         }
-
     }
+
+    //passing in sample Country with data
+    public static void saveCountry(Country country){
+        Session session = Util.getSession();
+        session.beginTransaction();
+        session.save(country);
+        session.getTransaction().commit();
+        session.close();
+    }
+
 };
