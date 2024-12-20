@@ -14,6 +14,7 @@ public class Main {
 
     public static void main(String[] args) {
         //retrieve list of countries
+        //BEFORE?
         List<Country> countries = fetchAllCountries();
 
         //building country obj
@@ -25,8 +26,9 @@ public class Main {
         //persist the new country obj to db
         saveCountry(country);
 
+        //trying to grab the updated list of countries
         countries = fetchAllCountries();
-
+        System.out.printf("updated countries display", countries);
 
         //display list of contacts BEFORE THE UPDATE
         System.out.printf("%n%n Before update %n%n");
