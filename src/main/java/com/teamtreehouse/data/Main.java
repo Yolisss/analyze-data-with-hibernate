@@ -28,7 +28,7 @@ public class Main {
 
         //trying to grab the updated list of countries
         countries = fetchAllCountries();
-        System.out.printf("updated countries display", countries);
+        System.out.printf("updated countries: %s%n", countries);
 
         //display list of contacts BEFORE THE UPDATE
         System.out.printf("%n%n Before update %n%n");
