@@ -20,12 +20,8 @@ public class Country {
     @Column(precision = 11, scale = 8)
     private BigDecimal adultLiteracyRate;
 
-    //Default constructor for JPA
-    //JPA will call our default constructor when instantiating Country obj
-    //we need to make sure one is present
     public Country(){};
 
-    //builder constructor
     public Country(CountryBuilder builder){
         this.code = builder.code;
         this.name = builder.name;
@@ -76,15 +72,12 @@ public class Country {
         this.adultLiteracyRate = adultLiteracyRate;
     }
 
-    //CountryBuilder CLASS
     public static class CountryBuilder{
         private String code;
         private String name;
         private BigDecimal internetUsers;
         private BigDecimal adultLiteracyRate;
 
-        //CountryBuilder CONSTRUCTOR
-        //necessary fields needed when creating a country
         public CountryBuilder(String code, String name){
             this.code = code;
             this.name = name;

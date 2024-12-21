@@ -8,11 +8,9 @@ import org.hibernate.service.ServiceRegistry;
 
 public class Util {
 
-    //allows java code to interact with db; reusable reference to a SessionFactory (buildSessionFactory)
     private static final SessionFactory sessionFactory = buildSessionFactory();
 
     //creates and configures the connection to the db
-    //session field is initialized, according to our code, before calling the main method
     private static SessionFactory buildSessionFactory() {
 
         final ServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
