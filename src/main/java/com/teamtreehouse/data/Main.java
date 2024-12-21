@@ -8,6 +8,8 @@ import org.hibernate.Session;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Locale;
+import java.util.Scanner;
 
 
 public class Main {
@@ -18,24 +20,22 @@ public class Main {
         addSampleCountries();
 
         List<Country> countries = fetchAllCountries();
-        System.out.printf("before: %s%n", countries);
+        //System.out.printf("before: %s%n", countries);
 
         //grabbing the updated list of countries
         countries = fetchAllCountries();
-        System.out.printf("updated countries: %s%n", countries);
+        //System.out.printf("updated countries: %s%n", countries);
 
         displayCountryData(countries);
 
         displayAnalysis(countries);
 
         //grab obj from db based off id
-        Country c = findCountryByCode("USA");
+       findCountryByCode();
 
-        c.setCode("IND");
+       List<Country> updatedCountries = fetchAllCountries();
 
-        saveCountry(c);
-
-        System.out.printf("primary key should've changed: %s", c);
+       displayCountryData(updatedCountries);
 
     }
 
@@ -75,7 +75,7 @@ public class Main {
         criteriaQuery.from(Country.class);
 
         List<Country> countries = session.createQuery(criteriaQuery).getResultList();
-        System.out.println("Fetched Countries: " + countries.size());
+        //System.out.println("Fetched Countries: " + countries.size());
 
         if (!countries.isEmpty()) {
             countries.forEach(country -> System.out.println(country.toString()));
@@ -161,16 +161,52 @@ public class Main {
 
     };
 
-    public static Country findCountryByCode(String code){
+    public static Country findCountryByCode(){
+        //prompt user for country code to edit
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.printf("Enter the country code to edit: ");
+        String code = scanner.nextLine().toUpperCase();
+
+        //returning existing data for the given country code
         Session session = Util.getSession();
-
-        session.beginTransaction();
-
         Country country = session.get(Country.class, code);
 
+        if(country == null){
+            System.out.println("Country with code " + code + " not found.");
+            session.close();
+            return null;
+        }
+
+        System.out.println("Existing Country Data");
+        System.out.println("Code : " + country.getName());
+        System.out.println("Name : " + country.getName());
+        System.out.println("Internet User: " + country.getInternetUsers());
+        System.out.println("Adult Literacy Rate: " + country.getAdultLiteracyRate());
+
+        System.out.print("Enter the new name(or press Enter to keep current data as is)");
+        String newName = scanner.nextLine();
+        country.setName(newName);
+
+        System.out.print("Enter new Internet Users (or press Enter to keep current data as is");
+        String newIU = scanner.nextLine();
+        if(newIU.length() > 11) {
+            System.out.println("The input is too large for the database column");
+        } else {
+            //QUESTION FOR TH: DO WE ASSUME THE USER SHOULD INCLUDE A DECIMAL FOR ENTRY?
+            country.setInternetUsers(new BigDecimal(newIU));
+        }
+
+        System.out.print("Enter new Adult Literacy Rate (or press Enter to keep current data as is");
+        String newARL = scanner.nextLine();
+        country.setAdultLiteracyRate(new BigDecimal(newARL));
+
+        session.beginTransaction();
+        session.save(country);
+        session.getTransaction().commit();
         session.close();
 
-        return country;
+        return null;
     };
 
 
