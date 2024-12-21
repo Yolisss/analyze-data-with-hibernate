@@ -161,15 +161,6 @@ public class Main {
 
     };
 
-    //grab obj by id
-    //create method, pass in country as arg
-    //create session
-    //begin transaction
-    //grab id by getting getCode method from Country.class
-    //close session
-    //return country
-
-
     public static Country findCountryByCode(String code){
         Session session = Util.getSession();
 
