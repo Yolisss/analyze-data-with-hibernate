@@ -25,17 +25,21 @@ public class Main {
         //grabbing the updated list of countries
         countries = fetchAllCountries();
         //System.out.printf("updated countries: %s%n", countries);
-
         displayCountryData(countries);
 
+        //display analysis
         displayAnalysis(countries);
 
         //grab obj from db based off id
        findCountryByCode();
-
+       //returns list with new updates
        List<Country> updatedCountries = fetchAllCountries();
-
        displayCountryData(updatedCountries);
+
+       //create new data and fetch updated list
+        createNewCountry();
+        countries = fetchAllCountries();
+        displayCountryData(countries);
 
     }
 
@@ -158,7 +162,6 @@ public class Main {
         System.out.printf("| %-20s | %-20s | %-20s | %-20s | %n", "MAX INTERNET USERS", "MIN INTERNET USERS", "MAX ADULT LITERACY RATE", "MIN ADULT LITERACY RATE");
         System.out.printf("| %-20s | %-20s | %-20s | %-20S | %n", maxInternetUsers, minInternetUsers, maxAdultLiteracyRate, minAdultLiteracyRate);
         System.out.printf("-------------------------------------------------------------------------------------------------------------------%n");
-
     };
 
     public static Country findCountryByCode(){
@@ -209,5 +212,40 @@ public class Main {
         return null;
     };
 
+    //add new country
+    public static Country createNewCountry(){
+        //scanner scanner;
+        Scanner scanner = new Scanner(System.in);
+        //"Create your country of choice"
+        System.out.println("Add your Country %n");
+
+        System.out.println("Enter country's code: %n");
+        String newCountryCode = scanner.nextLine().toUpperCase();
+
+
+        System.out.println("Enter country's name: %n");
+        String newCountryName = scanner.nextLine();
+
+        System.out.println("Enter new Internet Users: %n");
+        BigDecimal newInternetUser = scanner.nextBigDecimal();
+
+        System.out.print("Enter new Adult Literacy Rate: %n");
+        BigDecimal newAdultLiteracyRate = scanner.nextBigDecimal();
+
+        Country country = new Country.CountryBuilder(newCountryCode, newCountryName)
+                .withInternetUsers(newInternetUser)
+                .withAdultLiteracyRate(newAdultLiteracyRate)
+                .build();
+
+        saveCountry(country);
+
+        Session session = Util.getSession();
+        session.beginTransaction();
+        session.getTransaction().commit();
+        session.close();
+
+        return country;
+
+    };
 
 };
