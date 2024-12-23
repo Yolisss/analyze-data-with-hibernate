@@ -19,7 +19,7 @@ public class Main {
     }
 
     public void run(){
-        addSampleCountries();
+
         List<Country> countries = fetchAllCountries();
 
         Scanner scanner = new Scanner(System.in);
@@ -257,11 +257,6 @@ public class Main {
                 .build();
 
         saveCountry(country);
-
-        Session session = Util.getSession();
-        session.beginTransaction();
-        session.getTransaction().commit();
-        session.close();
 
         return country;
     };
