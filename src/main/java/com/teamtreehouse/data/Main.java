@@ -17,30 +17,33 @@ public class Main {
     public static void main(String[] args) {
 
         //building country objects
-        addSampleCountries();
+      addSampleCountries();
+//
+//        List<Country> countries = fetchAllCountries();
+//        //System.out.printf("before: %s%n", countries);
+//
+//        //grabbing the updated list of countries
+//        countries = fetchAllCountries();
+//        //System.out.printf("updated countries: %s%n", countries);
+//        displayCountryData(countries);
+//
+//        //display analysis
+//        displayAnalysis(countries);
+//
+//        //grab obj from db based off id
+//       findCountryByCode();
+//       //returns list with new updates
+//       List<Country> updatedCountries = fetchAllCountries();
+//       displayCountryData(updatedCountries);
+//
+//       //create new data and fetch updated list
+//        createNewCountry();
+//        countries = fetchAllCountries();
+//        displayCountryData(countries);
 
+        deleteCountry();
         List<Country> countries = fetchAllCountries();
-        //System.out.printf("before: %s%n", countries);
-
-        //grabbing the updated list of countries
-        countries = fetchAllCountries();
-        //System.out.printf("updated countries: %s%n", countries);
         displayCountryData(countries);
-
-        //display analysis
-        displayAnalysis(countries);
-
-        //grab obj from db based off id
-       findCountryByCode();
-       //returns list with new updates
-       List<Country> updatedCountries = fetchAllCountries();
-       displayCountryData(updatedCountries);
-
-       //create new data and fetch updated list
-        createNewCountry();
-        countries = fetchAllCountries();
-        displayCountryData(countries);
-
     }
 
     private static void addSampleCountries(){
@@ -245,7 +248,41 @@ public class Main {
         session.close();
 
         return country;
-
     };
+
+    public static void deleteCountry() {
+        Scanner scanner = new Scanner(System.in); // Initialize Scanner for user input
+
+        System.out.print("Enter the country code of the country you want to delete: ");
+        String code = scanner.nextLine(); // Prompt the user and get input
+
+        Session session = Util.getSession(); // Open a session
+        try {
+            session.beginTransaction(); // Begin a transaction
+
+            // Fetch the country based on the provided code
+            Country country = session.get(Country.class, code);
+            if (country == null) {
+                System.out.println("Sorry, no country found with code: " + code);
+            } else {
+                // Confirm deletion with the user
+                System.out.print("Are you sure you want to delete " + country.getName() + "? (yes/no): ");
+                String confirmation = scanner.nextLine();
+                if ("yes".equalsIgnoreCase(confirmation)) {
+                    session.delete(country); // Delete the country
+                    System.out.println("Country " + country.getName() + " has been deleted successfully.");
+                } else {
+                    System.out.println("Deletion canceled.");
+                }
+            }
+
+            session.getTransaction().commit(); // Commit the transaction
+        } catch (Exception e) {
+            session.getTransaction().rollback(); // Rollback in case of an error
+            System.out.println("An error occurred: " + e.getMessage());
+        } finally {
+            session.close(); // Always close the session
+        }
+    }
 
 };
