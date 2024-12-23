@@ -8,42 +8,67 @@ import org.hibernate.Session;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 
 
 public class Main {
 
     public static void main(String[] args) {
+        Main app = new Main();
+        app.run();
+    }
 
-        //building country objects
-      addSampleCountries();
-//
-//        List<Country> countries = fetchAllCountries();
-//        //System.out.printf("before: %s%n", countries);
-//
-//        //grabbing the updated list of countries
-//        countries = fetchAllCountries();
-//        //System.out.printf("updated countries: %s%n", countries);
-//        displayCountryData(countries);
-//
-//        //display analysis
-//        displayAnalysis(countries);
-//
-//        //grab obj from db based off id
-//       findCountryByCode();
-//       //returns list with new updates
-//       List<Country> updatedCountries = fetchAllCountries();
-//       displayCountryData(updatedCountries);
-//
-//       //create new data and fetch updated list
-//        createNewCountry();
-//        countries = fetchAllCountries();
-//        displayCountryData(countries);
-
-        deleteCountry();
+    public void run(){
+        addSampleCountries();
         List<Country> countries = fetchAllCountries();
-        displayCountryData(countries);
+
+        Scanner scanner = new Scanner(System.in);
+
+        String choice;
+        do {
+            displayMenu();
+            choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1":
+                    displayCountryData(countries);
+                    break;
+                case "2":
+                    displayAnalysis(countries);
+                    break;
+                case "3":
+                    countries = fetchAllCountries();
+                    break;
+                case "4":
+                    editCountry();
+                    countries = fetchAllCountries();
+                    break;
+                case "5":
+                    createNewCountry();
+                    countries = fetchAllCountries();
+                    break;
+                case "6":
+                    deleteCountry();
+                    countries = fetchAllCountries();
+                    break;
+                case "7":
+                    System.out.println("Goodbye!");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Try again.");
+            }
+        } while (true);
+    }
+
+    public void displayMenu(){
+        System.out.println("Choose an option:");
+        System.out.println("[1] Display List of Countries");
+        System.out.println("[2] Display Analysis");
+        System.out.println("[3] Refresh Data");
+        System.out.println("[4] Edit Country");
+        System.out.println("[5] Create New Country");
+        System.out.println("[6] Delete a Country");
+        System.out.println("[7] Exit");
     }
 
     private static void addSampleCountries(){
@@ -82,7 +107,6 @@ public class Main {
         criteriaQuery.from(Country.class);
 
         List<Country> countries = session.createQuery(criteriaQuery).getResultList();
-        //System.out.println("Fetched Countries: " + countries.size());
 
         if (!countries.isEmpty()) {
             countries.forEach(country -> System.out.println(country.toString()));
@@ -105,7 +129,6 @@ public class Main {
 
 
         for(Country country : countries){
-            //grab the data you need
             String code = country.getCode();
             String name = country.getName();
             String internetUsers = (country.getInternetUsers().compareTo(BigDecimal.ZERO) == 0) ? "--" : String.format("%.8f", country.getInternetUsers());
@@ -132,12 +155,8 @@ public class Main {
 
         for(Country country : countries){
 
-            //grab the data you need
             BigDecimal internetUsers = country.getInternetUsers();
             BigDecimal adultLiteracyRate = country.getAdultLiteracyRate();
-
-            System.out.printf("AdultLiteracyRate: %s", adultLiteracyRate);
-
 
             if(internetUsers.compareTo(maxInternetUsers) > 0){
                 maxInternetUsers = internetUsers;
@@ -167,7 +186,7 @@ public class Main {
         System.out.printf("-------------------------------------------------------------------------------------------------------------------%n");
     };
 
-    public static Country findCountryByCode(){
+    public static Country editCountry(){
         //prompt user for country code to edit
         Scanner scanner = new Scanner(System.in);
 
@@ -199,7 +218,6 @@ public class Main {
         if(newIU.length() > 11) {
             System.out.println("The input is too large for the database column");
         } else {
-            //QUESTION FOR TH: DO WE ASSUME THE USER SHOULD INCLUDE A DECIMAL FOR ENTRY?
             country.setInternetUsers(new BigDecimal(newIU));
         }
 
@@ -219,20 +237,18 @@ public class Main {
     public static Country createNewCountry(){
         //scanner scanner;
         Scanner scanner = new Scanner(System.in);
-        //"Create your country of choice"
-        System.out.println("Add your Country %n");
+        System.out.printf("Add your Country %n");
 
-        System.out.println("Enter country's code: %n");
+        System.out.printf("Enter country's code: %n");
         String newCountryCode = scanner.nextLine().toUpperCase();
 
-
-        System.out.println("Enter country's name: %n");
+        System.out.printf("Enter country's name: %n");
         String newCountryName = scanner.nextLine();
 
-        System.out.println("Enter new Internet Users: %n");
+        System.out.printf("Enter new Internet Users: %n");
         BigDecimal newInternetUser = scanner.nextBigDecimal();
 
-        System.out.print("Enter new Adult Literacy Rate: %n");
+        System.out.printf("Enter new Adult Literacy Rate: %n");
         BigDecimal newAdultLiteracyRate = scanner.nextBigDecimal();
 
         Country country = new Country.CountryBuilder(newCountryCode, newCountryName)
@@ -251,14 +267,14 @@ public class Main {
     };
 
     public static void deleteCountry() {
-        Scanner scanner = new Scanner(System.in); // Initialize Scanner for user input
+        Scanner scanner = new Scanner(System.in);
 
         System.out.print("Enter the country code of the country you want to delete: ");
-        String code = scanner.nextLine(); // Prompt the user and get input
+        String code = scanner.nextLine();
 
-        Session session = Util.getSession(); // Open a session
+        Session session = Util.getSession();
         try {
-            session.beginTransaction(); // Begin a transaction
+            session.beginTransaction();
 
             // Fetch the country based on the provided code
             Country country = session.get(Country.class, code);
@@ -269,19 +285,19 @@ public class Main {
                 System.out.print("Are you sure you want to delete " + country.getName() + "? (yes/no): ");
                 String confirmation = scanner.nextLine();
                 if ("yes".equalsIgnoreCase(confirmation)) {
-                    session.delete(country); // Delete the country
+                    session.delete(country);
                     System.out.println("Country " + country.getName() + " has been deleted successfully.");
                 } else {
                     System.out.println("Deletion canceled.");
                 }
             }
 
-            session.getTransaction().commit(); // Commit the transaction
+            session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback(); // Rollback in case of an error
             System.out.println("An error occurred: " + e.getMessage());
         } finally {
-            session.close(); // Always close the session
+            session.close();
         }
     }
 
