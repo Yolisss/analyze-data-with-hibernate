@@ -137,13 +137,13 @@ public class Main {
             BigDecimal internetUser = country.getInternetUser();
             String internetUsers = (internetUser == null || internetUser.compareTo(BigDecimal.ZERO) == 0)
                     ? "--"
-                    : String.format("%.8f", internetUser);
+                    : String.format("%.2f", internetUser);
 
             // Check if adultLiteracyRate is null and handle it accordingly
             BigDecimal adultLiteracyRate = country.getAdultLiteracyRate();
             String adultLiteracyRateFormatted = (adultLiteracyRate == null || adultLiteracyRate.compareTo(BigDecimal.ZERO) == 0)
                     ? "--"
-                    : String.format("%.8f", adultLiteracyRate);
+                    : String.format("%.2f", adultLiteracyRate);
 
             System.out.printf("| %-10s | %-32s | %-20s | %-20s |%n", code, name, internetUsers, adultLiteracyRateFormatted);
         }
@@ -158,20 +158,18 @@ public class Main {
         System.out.printf("| %-10s | %-32s | %-20s | %-20s |%n", "CODE", "NAME", "INTERNET USERS", "ADULT LITERACY RATE");
         System.out.printf("-------------------------------------------------------------------------------------------------------------------%n");
 
-        //max and min for IU and ALR
+        // max and min for IU and ALR
         BigDecimal maxInternetUsers = BigDecimal.ZERO; //(0.0)
         BigDecimal minInternetUsers = BigDecimal.valueOf(Double.MAX_VALUE);
 
         BigDecimal maxAdultLiteracyRate = BigDecimal.ZERO;
         BigDecimal minAdultLiteracyRate = BigDecimal.valueOf(Double.MAX_VALUE);
 
-
         for(Country country : countries){
-
             BigDecimal internetUsers = country.getInternetUser();
             BigDecimal adultLiteracyRate = country.getAdultLiteracyRate();
 
-            // Check for null values
+            // Check for null values and update max/min values
             if (internetUsers != null) {
                 if (internetUsers.compareTo(maxInternetUsers) > 0) {
                     maxInternetUsers = internetUsers;
@@ -190,19 +188,25 @@ public class Main {
                 }
             }
 
+            // Formatting output for each country
             String code = country.getCode();
             String name = country.getName();
-            String updatedInternetUsers = (internetUsers.compareTo(BigDecimal.ZERO) == 0) ? "--" : String.format("%.8f", internetUsers);
-            String updatedAdultLiteracyRate = (adultLiteracyRate.compareTo(BigDecimal.ZERO) == 0) ? "--" : String.format("%.8f", adultLiteracyRate);
+            String updatedInternetUsers = (internetUsers == null || internetUsers.compareTo(BigDecimal.ZERO) == 0) ? "--" : String.format("%.2f", internetUsers);
+            String updatedAdultLiteracyRate = (adultLiteracyRate == null || adultLiteracyRate.compareTo(BigDecimal.ZERO) == 0) ? "--" : String.format("%.2f", adultLiteracyRate);
 
             System.out.printf("| %-10s | %-32s | %-20s | %-20s |%n", code, name, updatedInternetUsers, updatedAdultLiteracyRate);
         }
 
         System.out.printf("-------------------------------------------------------------------------------------------------------------------%n");
-        System.out.printf("| %-20s | %-20s | %-20s | %-20s | %n", "MAX INTERNET USERS", "MIN INTERNET USERS", "MAX ADULT LITERACY RATE", "MIN ADULT LITERACY RATE");
-        System.out.printf("| %-20s | %-20s | %-20s | %-20S | %n", maxInternetUsers, minInternetUsers, maxAdultLiteracyRate, minAdultLiteracyRate);
+        // Print max and min without checking for null
+        System.out.printf("| %-20s | %-20s | %-20s | %-20s | %n",
+                "MAX INTERNET USERS", "MIN INTERNET USERS", "MAX ADULT LITERACY RATE", "MIN ADULT LITERACY RATE");
+        System.out.printf("| %-20s | %-20s | %-20s | %-20S | %n",
+                maxInternetUsers, minInternetUsers, maxAdultLiteracyRate, minAdultLiteracyRate);
         System.out.printf("-------------------------------------------------------------------------------------------------------------------%n");
-    };
+    }
+
+
 
     public static Country editCountry(){
         //prompt user for country code to edit
