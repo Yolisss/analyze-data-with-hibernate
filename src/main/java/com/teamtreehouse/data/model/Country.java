@@ -15,7 +15,7 @@ public class Country {
     private String name;
 
     @Column(precision = 11, scale = 8)
-    private BigDecimal internetUsers;
+    private BigDecimal internetUser;
 
     @Column(precision = 11, scale = 8)
     private BigDecimal adultLiteracyRate;
@@ -25,7 +25,7 @@ public class Country {
     public Country(CountryBuilder builder){
         this.code = builder.code;
         this.name = builder.name;
-        this.internetUsers = builder.internetUsers;
+        this.internetUser = builder.internetUser;
         this.adultLiteracyRate = builder.adultLiteracyRate;
     };
 
@@ -35,7 +35,7 @@ public class Country {
         return String.format("Country{" +
                 "code='" + code + '\'' +
                 ", name='" + name + '\'' +
-                ", internetUser=" + internetUsers +
+                ", internetUser=" + internetUser +
                 ", adultLiteracyRate=" + adultLiteracyRate +
                 '}');
     }
@@ -56,12 +56,12 @@ public class Country {
         this.name = name;
     }
 
-    public BigDecimal getInternetUsers() {
-        return internetUsers;
+    public BigDecimal getInternetUser() {
+        return internetUser;
     }
 
-    public void setInternetUsers(BigDecimal internetUsers) {
-        this.internetUsers = internetUsers;
+    public void setInternetUser(BigDecimal internetUser) {
+        this.internetUser = internetUser;
     }
 
     public BigDecimal getAdultLiteracyRate() {
@@ -75,7 +75,7 @@ public class Country {
     public static class CountryBuilder{
         private String code;
         private String name;
-        private BigDecimal internetUsers;
+        private BigDecimal internetUser;
         private BigDecimal adultLiteracyRate;
 
         public CountryBuilder(String code, String name){
@@ -84,7 +84,7 @@ public class Country {
         }
 
         public CountryBuilder withInternetUsers(BigDecimal internetUsers){
-            this.internetUsers = internetUsers;
+            this.internetUser = internetUsers;
            // System.out.println("Setting internetUsers to: " + internetUsers); // Log when it's set
             return this;
         };

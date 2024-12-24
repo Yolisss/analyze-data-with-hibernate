@@ -21,6 +21,8 @@ public class Main {
     public void run(){
 
         List<Country> countries = fetchAllCountries();
+        System.out.printf("Countries data: %s", countries);
+
 
         Scanner scanner = new Scanner(System.in);
 
@@ -119,7 +121,7 @@ public class Main {
         return countries;
     }
 
-    public static void displayCountryData(List<Country> countries){
+    public static void displayCountryData(List<Country> countries) {
         System.out.printf("-------------------------------------------------------------------------------------------------------------------%n");
         System.out.printf("                                            Country's Data              %n");
         System.out.printf("-------------------------------------------------------------------------------------------------------------------%n");
@@ -127,15 +129,26 @@ public class Main {
         System.out.printf("| %-10s | %-32s | %-20s | %-20s |%n", "CODE", "NAME", "INTERNET USERS", "ADULT LITERACY RATE");
         System.out.printf("-------------------------------------------------------------------------------------------------------------------%n");
 
-
-        for(Country country : countries){
+        for (Country country : countries) {
             String code = country.getCode();
             String name = country.getName();
-            String internetUsers = (country.getInternetUsers().compareTo(BigDecimal.ZERO) == 0) ? "--" : String.format("%.8f", country.getInternetUsers());
-            String adultLiteracyRate = (country.getAdultLiteracyRate().compareTo(BigDecimal.ZERO) == 0) ? "--" : String.format("%.8f", country.getAdultLiteracyRate());
-            System.out.printf("| %-10s | %-32s | %-20s | %-20s |%n", code, name, internetUsers, adultLiteracyRate);
+
+            // Check if internetUser is null and handle it accordingly
+            BigDecimal internetUser = country.getInternetUser();
+            String internetUsers = (internetUser == null || internetUser.compareTo(BigDecimal.ZERO) == 0)
+                    ? "--"
+                    : String.format("%.8f", internetUser);
+
+            // Check if adultLiteracyRate is null and handle it accordingly
+            BigDecimal adultLiteracyRate = country.getAdultLiteracyRate();
+            String adultLiteracyRateFormatted = (adultLiteracyRate == null || adultLiteracyRate.compareTo(BigDecimal.ZERO) == 0)
+                    ? "--"
+                    : String.format("%.8f", adultLiteracyRate);
+
+            System.out.printf("| %-10s | %-32s | %-20s | %-20s |%n", code, name, internetUsers, adultLiteracyRateFormatted);
         }
     }
+
 
     public static void displayAnalysis(List<Country> countries){
         System.out.printf("-------------------------------------------------------------------------------------------------------------------%n");
@@ -155,21 +168,26 @@ public class Main {
 
         for(Country country : countries){
 
-            BigDecimal internetUsers = country.getInternetUsers();
+            BigDecimal internetUsers = country.getInternetUser();
             BigDecimal adultLiteracyRate = country.getAdultLiteracyRate();
 
-            if(internetUsers.compareTo(maxInternetUsers) > 0){
-                maxInternetUsers = internetUsers;
-            }
-            if(internetUsers.compareTo(minInternetUsers) < 0){
-                minInternetUsers = internetUsers;
+            // Check for null values
+            if (internetUsers != null) {
+                if (internetUsers.compareTo(maxInternetUsers) > 0) {
+                    maxInternetUsers = internetUsers;
+                }
+                if (internetUsers.compareTo(minInternetUsers) < 0) {
+                    minInternetUsers = internetUsers;
+                }
             }
 
-            if(adultLiteracyRate.compareTo(maxAdultLiteracyRate) > 0){
-                maxAdultLiteracyRate = adultLiteracyRate;
-            }
-            if(adultLiteracyRate.compareTo(minAdultLiteracyRate) < 0){
-                minAdultLiteracyRate = adultLiteracyRate;
+            if (adultLiteracyRate != null) {
+                if (adultLiteracyRate.compareTo(maxAdultLiteracyRate) > 0) {
+                    maxAdultLiteracyRate = adultLiteracyRate;
+                }
+                if (adultLiteracyRate.compareTo(minAdultLiteracyRate) < 0) {
+                    minAdultLiteracyRate = adultLiteracyRate;
+                }
             }
 
             String code = country.getCode();
@@ -206,7 +224,7 @@ public class Main {
         System.out.println("Existing Country Data");
         System.out.println("Code : " + country.getName());
         System.out.println("Name : " + country.getName());
-        System.out.println("Internet User: " + country.getInternetUsers());
+        System.out.println("Internet User: " + country.getInternetUser());
         System.out.println("Adult Literacy Rate: " + country.getAdultLiteracyRate());
 
         System.out.print("Enter the new name(or press Enter to keep current data as is)");
@@ -218,7 +236,7 @@ public class Main {
         if(newIU.length() > 11) {
             System.out.println("The input is too large for the database column");
         } else {
-            country.setInternetUsers(new BigDecimal(newIU));
+            country.setInternetUser(new BigDecimal(newIU));
         }
 
         System.out.print("Enter new Adult Literacy Rate (or press Enter to keep current data as is");
