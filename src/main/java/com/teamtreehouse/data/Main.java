@@ -73,22 +73,22 @@ public class Main {
         System.out.println("[7] Exit");
     }
 
-    private static void addSampleCountries(){
-        saveCountry(new CountryBuilder("USA", "United States")
-                .withInternetUsers(new BigDecimal("123.12345678"))
-                .withAdultLiteracyRate(new BigDecimal("98.5736"))
-                .build());
-
-        saveCountry(new CountryBuilder("CAN", "Canada")
-                .withInternetUsers(new BigDecimal("98.23456789"))
-                .withAdultLiteracyRate(new BigDecimal("99.8765"))
-                .build());
-
-        saveCountry(new CountryBuilder("MEX", "Mexico")
-                .withInternetUsers(new BigDecimal("75.34567890"))
-                .withAdultLiteracyRate(new BigDecimal("94.5678"))
-                .build());
-    }
+//    private static void addSampleCountries(){
+//        saveCountry(new CountryBuilder("USA", "United States")
+//                .withInternetUsers(new BigDecimal("123.12345678"))
+//                .withAdultLiteracyRate(new BigDecimal("98.5736"))
+//                .build());
+//
+//        saveCountry(new CountryBuilder("CAN", "Canada")
+//                .withInternetUsers(new BigDecimal("98.23456789"))
+//                .withAdultLiteracyRate(new BigDecimal("99.8765"))
+//                .build());
+//
+//        saveCountry(new CountryBuilder("MEX", "Mexico")
+//                .withInternetUsers(new BigDecimal("75.34567890"))
+//                .withAdultLiteracyRate(new BigDecimal("94.5678"))
+//                .build());
+//    }
 
     //passing in sample Country with data
     public static void saveCountry(Country country){
@@ -257,21 +257,61 @@ public class Main {
 
     //add new country
     public static Country createNewCountry(){
-        //scanner scanner;
+        System.out.printf("-------------------------------------------------------------------------------------------------------------------%n");
+        System.out.printf("                                       Create Your Country             %n");
+        System.out.printf("-------------------------------------------------------------------------------------------------------------------%n");
+
+        // Create a Scanner for user input
         Scanner scanner = new Scanner(System.in);
         System.out.printf("Add your Country %n");
 
-        System.out.printf("Enter country's code: %n");
+        // Prompt user for Country Code and validate input
+        System.out.printf("Enter country's code (required): %n");
         String newCountryCode = scanner.nextLine().toUpperCase();
+        if (newCountryCode == null || newCountryCode.trim().isEmpty()) {
+            newCountryCode = "--"; // Represent null as "--"
+        }
 
-        System.out.printf("Enter country's name: %n");
+        // Prompt user for Country Name and validate input
+        System.out.printf("Enter country's name (required): %n");
         String newCountryName = scanner.nextLine();
+        if (newCountryName == null || newCountryName.trim().isEmpty()) {
+            newCountryName = "--"; // Represent null as "--"
+        }
 
-        System.out.printf("Enter new Internet Users: %n");
-        BigDecimal newInternetUser = scanner.nextBigDecimal();
+        // Prompt user for Internet Users and validate input
+        System.out.printf("Enter Internet Users (optional): %n");
+        String internetUserInput = scanner.nextLine();
+        BigDecimal newInternetUser = null;
+        if (!internetUserInput.trim().isEmpty()) {
+            try {
+                newInternetUser = new BigDecimal(internetUserInput);
+                if (newInternetUser.compareTo(BigDecimal.ZERO) == 0) {
+                    newInternetUser = null; // Treat 0 as null
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input for Internet Users. Setting to null.");
+            }
+        }
+        // Assign “--” if null or 0
+        String internetUserDisplay = (newInternetUser == null) ? "--" : String.format("%.2f", newInternetUser);
 
-        System.out.printf("Enter new Adult Literacy Rate: %n");
-        BigDecimal newAdultLiteracyRate = scanner.nextBigDecimal();
+        // Prompt user for Adult Literacy Rate and validate input
+        System.out.printf("Enter Adult Literacy Rate (optional): %n");
+        String literacyRateInput = scanner.nextLine();
+        BigDecimal newAdultLiteracyRate = null;
+        if (!literacyRateInput.trim().isEmpty()) {
+            try {
+                newAdultLiteracyRate = new BigDecimal(literacyRateInput);
+                if (newAdultLiteracyRate.compareTo(BigDecimal.ZERO) == 0) {
+                    newAdultLiteracyRate = null; // Treat 0 as null
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input for Adult Literacy Rate. Setting to null.");
+            }
+        }
+        // Assign “--” if null or 0
+        String literacyRateDisplay = (newAdultLiteracyRate == null) ? "--" : String.format("%.2f", newAdultLiteracyRate);
 
         Country country = new Country.CountryBuilder(newCountryCode, newCountryName)
                 .withInternetUsers(newInternetUser)
@@ -279,6 +319,10 @@ public class Main {
                 .build();
 
         saveCountry(country);
+
+        // Display values in the correct format
+        System.out.printf("Country Created: [Code: %s, Name: %s, Internet Users: %s, Literacy Rate: %s]%n",
+                newCountryCode, newCountryName, internetUserDisplay, literacyRateDisplay);
 
         return country;
     };

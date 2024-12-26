@@ -14,10 +14,10 @@ public class Country {
     @Column(length = 32)
     private String name;
 
-    @Column(precision = 11, scale = 8)
+    @Column(precision = 11, scale = 2)
     private BigDecimal internetUser;
 
-    @Column(precision = 11, scale = 8)
+    @Column(precision = 11, scale = 2)
     private BigDecimal adultLiteracyRate;
 
     public Country(){};
@@ -83,8 +83,8 @@ public class Country {
             this.name = name;
         }
 
-        public CountryBuilder withInternetUsers(BigDecimal internetUsers){
-            this.internetUser = internetUsers;
+        public CountryBuilder withInternetUsers(BigDecimal internetUser){
+            this.internetUser = internetUser;
            // System.out.println("Setting internetUsers to: " + internetUsers); // Log when it's set
             return this;
         };
