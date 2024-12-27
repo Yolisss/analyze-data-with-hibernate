@@ -110,12 +110,6 @@ public class Main {
 
         List<Country> countries = session.createQuery(criteriaQuery).getResultList();
 
-        if (!countries.isEmpty()) {
-            countries.forEach(country -> System.out.println(country.toString()));
-        } else {
-            System.out.println("No countries found.");
-        }
-
         session.close();
 
         return countries;
@@ -160,10 +154,10 @@ public class Main {
 
         // max and min for IU and ALR
         BigDecimal maxInternetUsers = BigDecimal.ZERO; //(0.0)
-        BigDecimal minInternetUsers = BigDecimal.valueOf(Double.MAX_VALUE);
+        BigDecimal minInternetUsers = BigDecimal.valueOf(100);
 
         BigDecimal maxAdultLiteracyRate = BigDecimal.ZERO;
-        BigDecimal minAdultLiteracyRate = BigDecimal.valueOf(Double.MAX_VALUE);
+        BigDecimal minAdultLiteracyRate = BigDecimal.valueOf(100);
 
         for(Country country : countries){
             BigDecimal internetUsers = country.getInternetUser();
@@ -202,7 +196,10 @@ public class Main {
         System.out.printf("| %-20s | %-20s | %-20s | %-20s | %n",
                 "MAX INTERNET USERS", "MIN INTERNET USERS", "MAX ADULT LITERACY RATE", "MIN ADULT LITERACY RATE");
         System.out.printf("| %-20s | %-20s | %-20s | %-20S | %n",
-                maxInternetUsers, minInternetUsers, maxAdultLiteracyRate, minAdultLiteracyRate);
+                String.format("%.2f", maxInternetUsers),
+                String.format("%.2f", minInternetUsers),
+                String.format("%.2f", maxAdultLiteracyRate),
+                String.format("%.2f", minAdultLiteracyRate));
         System.out.printf("-------------------------------------------------------------------------------------------------------------------%n");
     }
 
@@ -237,15 +234,23 @@ public class Main {
 
         System.out.print("Enter new Internet Users (or press Enter to keep current data as is");
         String newIU = scanner.nextLine();
-        if(newIU.length() > 11) {
-            System.out.println("The input is too large for the database column");
-        } else {
-            country.setInternetUser(new BigDecimal(newIU));
+        if (!newIU.trim().isEmpty()) {
+            try {
+                country.setInternetUser(new BigDecimal(newIU));
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input for Internet Users. Keeping the current value.");
+            }
         }
 
         System.out.print("Enter new Adult Literacy Rate (or press Enter to keep current data as is");
         String newARL = scanner.nextLine();
-        country.setAdultLiteracyRate(new BigDecimal(newARL));
+        if (!newARL.trim().isEmpty()) {
+            try {
+                country.setAdultLiteracyRate(new BigDecimal(newARL));
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input for Literacy Rate. Keeping the current value.");
+            }
+        }
 
         session.beginTransaction();
         session.save(country);
@@ -286,15 +291,10 @@ public class Main {
         if (!internetUserInput.trim().isEmpty()) {
             try {
                 newInternetUser = new BigDecimal(internetUserInput);
-                if (newInternetUser.compareTo(BigDecimal.ZERO) == 0) {
-                    newInternetUser = null; // Treat 0 as null
-                }
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input for Internet Users. Setting to null.");
+                System.out.println("Invalid input for Internet Users. Please enter a valid number.");
             }
         }
-        // Assign “--” if null or 0
-        String internetUserDisplay = (newInternetUser == null) ? "--" : String.format("%.2f", newInternetUser);
 
         // Prompt user for Adult Literacy Rate and validate input
         System.out.printf("Enter Adult Literacy Rate (optional): %n");
@@ -303,15 +303,10 @@ public class Main {
         if (!literacyRateInput.trim().isEmpty()) {
             try {
                 newAdultLiteracyRate = new BigDecimal(literacyRateInput);
-                if (newAdultLiteracyRate.compareTo(BigDecimal.ZERO) == 0) {
-                    newAdultLiteracyRate = null; // Treat 0 as null
-                }
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input for Adult Literacy Rate. Setting to null.");
+                System.out.println("Invalid input for Literacy Rate. Please enter a valid number.");
             }
         }
-        // Assign “--” if null or 0
-        String literacyRateDisplay = (newAdultLiteracyRate == null) ? "--" : String.format("%.2f", newAdultLiteracyRate);
 
         Country country = new Country.CountryBuilder(newCountryCode, newCountryName)
                 .withInternetUsers(newInternetUser)
@@ -322,7 +317,7 @@ public class Main {
 
         // Display values in the correct format
         System.out.printf("Country Created: [Code: %s, Name: %s, Internet Users: %s, Literacy Rate: %s]%n",
-                newCountryCode, newCountryName, internetUserDisplay, literacyRateDisplay);
+                newCountryCode, newCountryName, newInternetUser, newAdultLiteracyRate);
 
         return country;
     };
