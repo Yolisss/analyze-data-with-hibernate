@@ -29,7 +29,6 @@ public class Country {
         this.adultLiteracyRate = builder.adultLiteracyRate;
     };
 
-
     @Override
     public String toString() {
         return String.format("Country{" +
@@ -85,13 +84,11 @@ public class Country {
 
         public CountryBuilder withInternetUsers(BigDecimal internetUser){
             this.internetUser = internetUser;
-           // System.out.println("Setting internetUsers to: " + internetUsers); // Log when it's set
             return this;
         };
 
         public CountryBuilder withAdultLiteracyRate(BigDecimal adultLiteracyRate){
             this.adultLiteracyRate = adultLiteracyRate;
-            //System.out.println("Setting adultLiteracyRate to: " + adultLiteracyRate); // Log when it's set
             return this;
         };
 
