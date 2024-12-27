@@ -12,17 +12,14 @@ import java.util.Scanner;
 
 
 public class Main {
-
     public static void main(String[] args) {
         Main app = new Main();
         app.run();
     }
 
     public void run(){
-
         List<Country> countries = fetchAllCountries();
         System.out.printf("Countries data: %s", countries);
-
 
         Scanner scanner = new Scanner(System.in);
 
@@ -30,7 +27,6 @@ public class Main {
         do {
             displayMenu();
             choice = scanner.nextLine();
-
             switch (choice) {
                 case "1":
                     displayCountryData(countries);
@@ -73,23 +69,6 @@ public class Main {
         System.out.println("[7] Exit");
     }
 
-//    private static void addSampleCountries(){
-//        saveCountry(new CountryBuilder("USA", "United States")
-//                .withInternetUsers(new BigDecimal("123.12345678"))
-//                .withAdultLiteracyRate(new BigDecimal("98.5736"))
-//                .build());
-//
-//        saveCountry(new CountryBuilder("CAN", "Canada")
-//                .withInternetUsers(new BigDecimal("98.23456789"))
-//                .withAdultLiteracyRate(new BigDecimal("99.8765"))
-//                .build());
-//
-//        saveCountry(new CountryBuilder("MEX", "Mexico")
-//                .withInternetUsers(new BigDecimal("75.34567890"))
-//                .withAdultLiteracyRate(new BigDecimal("94.5678"))
-//                .build());
-//    }
-
     //passing in sample Country with data
     public static void saveCountry(Country country){
         Session session = Util.getSession();
@@ -103,13 +82,9 @@ public class Main {
         //sessionFactory, managing Hibernate's creation and handling connection to db
         //session -> interact with db
         Session session = Util.getSession();
-
         CriteriaQuery<Country> criteriaQuery = session.getCriteriaBuilder().createQuery(Country.class);
-
         criteriaQuery.from(Country.class);
-
         List<Country> countries = session.createQuery(criteriaQuery).getResultList();
-
         session.close();
 
         return countries;
@@ -142,7 +117,6 @@ public class Main {
             System.out.printf("| %-10s | %-32s | %-20s | %-20s |%n", code, name, internetUsers, adultLiteracyRateFormatted);
         }
     }
-
 
     public static void displayAnalysis(List<Country> countries){
         System.out.printf("-------------------------------------------------------------------------------------------------------------------%n");
@@ -201,9 +175,7 @@ public class Main {
                 String.format("%.2f", maxAdultLiteracyRate),
                 String.format("%.2f", minAdultLiteracyRate));
         System.out.printf("-------------------------------------------------------------------------------------------------------------------%n");
-    }
-
-
+    };
 
     public static Country editCountry(){
         //prompt user for country code to edit
@@ -312,7 +284,6 @@ public class Main {
                 .withInternetUsers(newInternetUser)
                 .withAdultLiteracyRate(newAdultLiteracyRate)
                 .build();
-
         saveCountry(country);
 
         // Display values in the correct format
@@ -347,7 +318,6 @@ public class Main {
                     System.out.println("Deletion canceled.");
                 }
             }
-
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback(); // Rollback in case of an error
@@ -356,5 +326,4 @@ public class Main {
             session.close();
         }
     }
-
 };
